@@ -1,6 +1,7 @@
 defmodule Beans.Pet do
   use GenServer
 
+  @topic "pet:beans"
   @hunger_tick 20_000
 
   @initial_state %{
@@ -43,7 +44,13 @@ defmodule Beans.Pet do
 
   @impl true
   def handle_call(:feed, _from, state) do
-    new_state = %{state | hunger: max(state.hunger - 20, 0)}
+    new_state = %{
+      state
+      | hunger: max(state.hunger - 20, 0),
+        energy: max(state.energy + 10, 0)
+    }
+
+    |> broadcast()
     {:reply, new_state, new_state}
   end
 
@@ -54,12 +61,14 @@ defmodule Beans.Pet do
       | happiness: min(state.happiness + 15, 100),
         energy: max(state.energy - 10, 0)
     }
+    |> broadcast()
     {:reply, new_state, new_state}
   end
 
   @impl true
   def handle_call(:pet, _from, state) do
     new_state = %{state | happiness: min(state.happiness + 10, 100)}
+    |> broadcast()
     {:reply, new_state, new_state}
   end
 
@@ -68,10 +77,21 @@ defmodule Beans.Pet do
     new_state = %{state | hunger: min(state.hunger + 5, 1000)}
 
     schedule_hunger_tick()
+    |> broadcast()
     {:noreply, new_state}
   end
 
   defp schedule_hunger_tick do
     Process.send_after(self(), :hunger_tick, @hunger_tick)
+  end
+
+  defp broadcast(new_state) do
+    Phoenix.PubSub.broadcast(
+      Beans.PubSub,
+      @topic,
+      {:pet_updated, new_state}
+    )
+
+    new_state
   end
 end

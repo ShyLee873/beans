@@ -5,31 +5,39 @@ defmodule BeansWeb.PetLive do
 
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket) do
+      Phoenix.PubSub.subscribe(Beans.PubSub, "pet:beans")
+    end
     {:ok, assign(socket, :pet, Pet.get_state())}
   end
 
   @impl true
   def handle_event("feed", _params, socket) do
-    pet = Pet.feed()
-    {:noreply, assign(socket, :pet, pet)}
+    Pet.feed()
+    {:noreply, socket}
   end
 
   @impl true
   def handle_event("play", _params, socket) do
-    pet = Pet.play()
-    {:noreply, assign(socket, :pet, pet)}
+    Pet.play()
+    {:noreply, socket}
   end
 
   @impl true
   def handle_event("pet", _params, socket) do
-    pet = Pet.pet()
-    {:noreply, assign(socket, :pet, pet)}
+    Pet.pet()
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info({:pet, _updated, pet}, socket) do
+    {:noreply, socket}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-      <div class="min-h-[80vh] flex items-center justifiy-center px-4 py-12">
+      <div class="flex min-h-[80vh] items-center justify-center px-4 py-12">
         <main class="w-full max-w-lg">
           <div class="rounded-3xl border border-zinc-200 bg-white p-8 shadow-xl">
             <div class="text-center">
@@ -109,7 +117,7 @@ defmodule BeansWeb.PetLive do
   defp pet_face(_pet), do: "🐱"
 
   defp mood(%{hunger: hunger}) when hunger >= 80, do: "Beans is hungry"
-  defp mood(%{energy: energy}) when energy <= 20, do: "Beans is sleepy"
+  defp mood(%{energy: energy}) when energy <= 20, do: "Beans is sleeping"
   defp mood(%{happiness: happiness}) when happiness >= 90, do: "Beans is happy"
   defp mood(%{hunger: hunger}) when hunger >= 50, do: "Beans could go for a snack"
   defp mood(_pet), do: "Beans is content"
