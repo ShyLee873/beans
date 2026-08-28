@@ -134,16 +134,74 @@ defmodule BeansWeb.PetLive do
   defp pet_face(%{happiness: happiness}) when happiness >= 90, do: "😸"
   defp pet_face(_pet), do: "🐱"
 
-  defp mood(%{hunger: hunger, happiness: happiness, sleeping: sleeping}) when hunger >= 80 and happiness <= 10 and sleeping, do: "Beans is sleeping away the lonliness 🥺"
-  defp mood(%{hunger: hunger, happiness: happiness, sleeping: sleeping}) when hunger >= 80 and happiness <= 40 and sleeping, do: "Beans is having an angry nap (But he still loves you)"
-  defp mood(%{energy: energy}) when energy == 0, do: "Beans is sleeping"
-  defp mood(%{hunger: hunger}) when hunger >= 80, do: "Beans is hungry"
-  defp mood(%{energy: energy}) when energy <= 10, do: "Beans needs a nap"
-  defp mood(%{energy: energy}) when energy <= 20, do: "Beans is getting tired"
-  defp mood(%{happiness: happiness}) when happiness <= 20, do: "Beans is so very sad"
-  defp mood(%{happiness: happiness}) when happiness <= 50, do: "Beans needs a cuddle"
-  defp mood(%{happiness: happiness}) when happiness <= 80, do: "Beans would like a cuddle"
-  defp mood(%{happiness: happiness}) when happiness >= 90, do: "Beans is happy"
-  defp mood(%{hunger: hunger}) when hunger >= 50, do: "Beans could go for a snack"
-  defp mood(_pet), do: "Beans is content"
+  defp mood(%{hunger: hunger, happiness: happiness, sleeping: sleeping}) when hunger >= 80 and happiness <= 10 and sleeping,
+    do: %{
+      text: "Beans is sleeping away the lonliness 🥺",
+      gif_query: "sad sleeping cat"
+    }
+
+  defp mood(%{hunger: hunger, happiness: happiness, sleeping: sleeping}) when hunger >= 80 and happiness <= 40 and sleeping,
+    do: %{
+      text: "Beans is having an angry nap (But he still loves you)",
+      gif_query: "grumpy sleeping cat"
+    }
+
+  defp mood(%{energy: energy}) when energy == 0,
+    do: %{
+      text: "Beans is sleeping",
+      gif_query: "happy sleeping cat"
+    }
+
+  defp mood(%{hunger: hunger}) when hunger >= 80,
+    do: %{
+      text: "Beans is hungry",
+      gif_query: "hungry cat"
+    }
+
+  defp mood(%{energy: energy}) when energy <= 10,
+    do: %{
+      text: "Beans needs a nap",
+      gif_query: "sleepy cat"
+    }
+
+  defp mood(%{energy: energy}) when energy <= 20,
+    do: %{
+      text: "Beans is getting tired",
+      gif_query: "yawning cat"
+    }
+
+  defp mood(%{happiness: happiness}) when happiness <= 20,
+    do: %{
+      text: "Beans is so very sad",
+      gif_query: "sad cat"
+    }
+
+  defp mood(%{happiness: happiness}) when happiness <= 50,
+    do: %{
+      text: "Beans needs a cuddle",
+      gif_query: "cat pet me needy"
+    }
+
+  defp mood(%{happiness: happiness}) when happiness <= 80,
+    do: %{
+      text: "Beans would like a cuddle",
+      gif_query: "cat attention"
+    }
+
+  defp mood(%{happiness: happiness}) when happiness >= 90,
+    do: %{
+      text: "Beans is happy",
+      gif_query: "happy cat purr"
+    }
+
+  defp mood(%{hunger: hunger}) when hunger >= 50,
+    do: %{
+      text: "Beans could go for a snack",
+      gif_query: "hungry cat feed me"
+    }
+  defp mood(_pet),
+    do: %{
+      text: "Beans is content",
+      gif_query: "happy cat"
+    }
 end
