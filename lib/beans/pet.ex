@@ -66,6 +66,7 @@ defmodule Beans.Pet do
           energy: clamp(state.energy - 15),
           hunger: clamp(state.hunger + 5)
       }
+      |> maybe_start_sleep()
       |> broadcast()
 
     {:reply, new_state, new_state}
@@ -82,15 +83,16 @@ defmodule Beans.Pet do
 
   @impl true
   def handle_info(:hunger_tick, state) do
-    new_state = %{
-      state
-      | hunger: clamp(state.hunger + 5),
-        energy: clamp(state.energy - 5),
-        happiness: clamp(state.happiness - 5)
-    }
-    |> maybe_start_sleep()
-    |> broadcast()
-    
+    new_state =
+      %{
+        state
+        | hunger: clamp(state.hunger + 5),
+          energy: clamp(state.energy - 5),
+          happiness: clamp(state.happiness - 5)
+      }
+      |> maybe_start_sleep()
+      |> broadcast()
+
     schedule_hunger_tick()
 
     {:noreply, new_state}
@@ -105,6 +107,7 @@ defmodule Beans.Pet do
         happiness: clamp(state.happiness - 10),
         sleeping: false
     }
+
     {:noreply, new_state}
   end
 

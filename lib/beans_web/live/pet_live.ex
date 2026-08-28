@@ -128,15 +128,21 @@ defmodule BeansWeb.PetLive do
     """
   end
 
+  # This will be replaced with js and giphy's api
   defp pet_face(%{hunger: hunger}) when hunger >= 80, do: "😾"
   defp pet_face(%{energy: energy}) when energy <= 0, do: "😴"
   defp pet_face(%{happiness: happiness}) when happiness >= 90, do: "😸"
   defp pet_face(_pet), do: "🐱"
 
-  defp mood(%{hunger: hunger, sleeping: sleeping}) when hunger >= 80 and sleeping, do: "Beans is having an angry nap"
+  defp mood(%{hunger: hunger, happiness: happiness, sleeping: sleeping}) when hunger >= 80 and happiness <= 10 and sleeping, do: "Beans is sleeping away the lonliness 🥺"
+  defp mood(%{hunger: hunger, happiness: happiness, sleeping: sleeping}) when hunger >= 80 and happiness <= 40 and sleeping, do: "Beans is having an angry nap (But he still loves you)"
+  defp mood(%{energy: energy}) when energy == 0, do: "Beans is sleeping"
   defp mood(%{hunger: hunger}) when hunger >= 80, do: "Beans is hungry"
-  defp mood(%{energy: energy}) when energy <= 20, do: "Beans is getting tired"
   defp mood(%{energy: energy}) when energy <= 10, do: "Beans needs a nap"
+  defp mood(%{energy: energy}) when energy <= 20, do: "Beans is getting tired"
+  defp mood(%{happiness: happiness}) when happiness <= 20, do: "Beans is so very sad"
+  defp mood(%{happiness: happiness}) when happiness <= 50, do: "Beans needs a cuddle"
+  defp mood(%{happiness: happiness}) when happiness <= 80, do: "Beans would like a cuddle"
   defp mood(%{happiness: happiness}) when happiness >= 90, do: "Beans is happy"
   defp mood(%{hunger: hunger}) when hunger >= 50, do: "Beans could go for a snack"
   defp mood(_pet), do: "Beans is content"
