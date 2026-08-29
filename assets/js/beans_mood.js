@@ -13,7 +13,7 @@ async function getBeans(query, apiKey) {
     if(!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
-
+    console.log(params)
     const result = await response.json();
 
     const gifs = result.data;

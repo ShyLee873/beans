@@ -46,23 +46,21 @@ defmodule BeansWeb.PetLive do
         <div class="rounded-3xl border border-zinc-200 bg-white p-8 shadow-xl">
           <% beans_mood = mood(@pet) %>
           <div class="text-center">
-            {pet_face(@pet)}
-
+            <h1 class="text-4xl font-bold text-zinc-900 mb-4">{@pet.name}</h1>
             <div
               id="beans-gif"
               phx-hook="BeansMood"
               data-query={beans_mood.gif_query}
               data-api-key={@giphy_api_key}
-              class="mb-4"
+              class="flex items-center justify-center mb-4"
             >
+            {pet_face(@pet)}
             </div>
-
-            <h1 class="text-4xl font-bold text-zinc-900">{@pet.name}</h1>
 
             <p class="mt-2 text-lg text-zinc-500">{beans_mood.text}</p>
           </div>
 
-          <div class="mt-10 space-y-6">
+          <div class="ml-22 mt-10 space-y-6">
             <.stat_bar
               label="Hunger"
               emoji="🍥"
