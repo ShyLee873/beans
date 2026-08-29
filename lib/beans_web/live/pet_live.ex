@@ -9,7 +9,10 @@ defmodule BeansWeb.PetLive do
       Phoenix.PubSub.subscribe(Beans.PubSub, "pet:beans")
     end
 
-    {:ok, assign(socket, :pet, Pet.get_state())}
+    {:ok,
+    socket
+    |> assign(:pet, Pet.get_state())
+    |> assign(:giphy_api_key, Application.fetch_env!(:beans, :giphy_api_key))}
   end
 
   @impl true
@@ -31,8 +34,8 @@ defmodule BeansWeb.PetLive do
   end
 
   @impl true
-  def handle_info({:pet, _updated, pet}, socket) do
-    {:noreply, socket}
+  def handle_info({:pet_updated, pet}, socket) do
+    {:noreply, assign(socket, :pet, pet)}
   end
 
   @impl true
@@ -41,14 +44,22 @@ defmodule BeansWeb.PetLive do
     <div class="flex min-h-[80vh] items-center justify-center px-4 py-12">
       <main class="w-full max-w-lg">
         <div class="rounded-3xl border border-zinc-200 bg-white p-8 shadow-xl">
+          <% beans_mood = mood(@pet) %>
           <div class="text-center">
-            <div class="text-7xl mb-4">
-              {pet_face(@pet)}
+            {pet_face(@pet)}
+
+            <div
+              id="beans-gif"
+              phx-hook="BeansMood"
+              data-query={beans_mood.gif_query}
+              data-api-key={@giphy_api_key}
+              class="mb-4"
+            >
             </div>
 
             <h1 class="text-4xl font-bold text-zinc-900">{@pet.name}</h1>
 
-            <p class="mt-2 text-lg text-zinc-500">{mood(@pet)}</p>
+            <p class="mt-2 text-lg text-zinc-500">{beans_mood.text}</p>
           </div>
 
           <div class="mt-10 space-y-6">

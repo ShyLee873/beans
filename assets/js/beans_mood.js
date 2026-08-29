@@ -1,11 +1,8 @@
-require('dotenv').config();
-const api_key = processFetch.env.API_KEY;
-
-async function getBeans() {
+async function getBeans(query, apiKey) {
   const params = new URLSearchParams({
-    api_key: api_key,
-    q: "cat",
-    limit: 1,
+    api_key: apiKey,
+    q: query,
+    limit: 20,
     rating: "pg",
     lang: "en"
   });
@@ -17,10 +14,40 @@ async function getBeans() {
       throw new Error(`Response status: ${response.status}`);
     }
 
-    const result = await res.json();
-    console.log(result);
-    return result
-  } catch(error) {
+    const result = await response.json();
+
+    const gifs = result.data;
+    const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
+
+    return randomGif;
+  } catch (error) {
     console.error(error.message)
   }
 }
+
+const BeansMood = {
+  async mounted() {
+    await this.updateBeans();
+  },
+
+  async updated() {
+    await this.updateBeans();
+  },
+
+  async updateBeans() {
+    const query = this.el.dataset.query;
+    const apiKey = this.el.dataset.apiKey
+    const gif = await getBeans(query, apiKey);
+
+    if (gif) {
+      this.el.innerHTML = `
+        <img 
+          src ="${gif.images.fixed_height.url}"
+          alt="${query}"
+        />
+      `
+    }
+  }
+};
+
+export default BeansMood;

@@ -22,6 +22,11 @@ end
 
 config :beans, BeansWeb.Endpoint, http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
+giphy_api_key =
+    System.get_env("GIPHY_API_KEY") || raise "GIPHY_API_KEY environment variable is missing"
+
+config :beans, :giphy_api_key, giphy_api_key
+
 if config_env() == :dev do
   # Reload browser tabs when matching files change.
   config :beans, BeansWeb.Endpoint,
