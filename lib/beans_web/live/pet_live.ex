@@ -106,7 +106,14 @@ defmodule BeansWeb.PetLive do
             </button>
           </div>
 
-          <p class="mt-7 text-center text-sm text-zinc-400">Definitely not plotting anything...</p>
+          <p
+            id="beans-quote"
+            phx-hook="BeansQuote"
+            phx-update="ignore"
+            class="mt-7 text-center text-sm text-zinc-400"
+          >
+            
+          </p>
         </div>
       </main>
     </div>
@@ -200,7 +207,7 @@ defmodule BeansWeb.PetLive do
   defp mood(%{happiness: happiness}) when happiness >= 90,
     do: %{
       text: "Beans is happy",
-      gif_query: "happy cat purr"
+      gif_query: "happy cat"
     }
 
   defp mood(%{hunger: hunger}) when hunger >= 50,

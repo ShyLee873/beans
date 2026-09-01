@@ -2,7 +2,7 @@ async function getBeans(query, apiKey) {
   const params = new URLSearchParams({
     api_key: apiKey,
     q: query,
-    limit: 20,
+    limit: 5,
     rating: "pg",
     lang: "en"
   });

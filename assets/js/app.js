@@ -25,12 +25,13 @@ import {LiveSocket} from "phoenix_live_view"
 import {hooks as colocatedHooks} from "phoenix-colocated/beans"
 import topbar from "../vendor/topbar"
 import BeansMood from "./beans_mood"
+import BeansQuote from "./beans_quote"
 
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken},
-  hooks: {...colocatedHooks, BeansMood},
+  hooks: {...colocatedHooks, BeansMood, BeansQuote},
 })
 
 // Show progress bar on live navigation and form submits
