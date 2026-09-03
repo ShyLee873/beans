@@ -1,5 +1,8 @@
 # Beans
 
+<img width="562" height="705" alt="image" src="https://github.com/user-attachments/assets/15fcd092-5e27-4013-9b04-824dbd297589" />
+
+
 Beans is a small virtual pet application built with **Elixir, Phoenix LiveView, and JavaScript**.
 
 I started the project as a way to learn Elixir by building something where I could visualize state change over time. Instead of working through isolated syntax exercises, I wanted a project that would let me experiment with processes, pattern matching, immutable state, PubSub, LiveView, and browser-side JavaScript in the same application.
